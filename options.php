@@ -2,23 +2,21 @@
 require_once 'Mailchimp.php';
 require_once 'OutstandingBarOptions.php';
 
-add_action('admin_menu', 'bar_add_admin_menu');
-add_action('admin_init', 'bar_settings_init');
+add_action('admin_menu', 'outstandingBar_add_admin_menu');
+add_action('admin_init', 'outstandingBar_settings_init');
 
-function bar_add_admin_menu() {
-    add_options_page('Outstanding Bar', 'Outstanding Bar', 'manage_options', 'outstanding-bar', 'outstandingbar_options_page');
+function outstandingBar_add_admin_menu() {
+    add_options_page('Outstanding Bar', 'Outstanding Bar', 'manage_options', 'outstanding-bar', 'outstandingBar_options_page');
 }
 
-function bar_settings_init() {
+function outstandingBar_settings_init() {
     $OBOptions = new \Contrast\OutstandingBarOptions();
-
     register_setting($OBOptions->getOptionGroup(), $OBOptions->getOptionName());
-
-    addMailchimpSection($OBOptions);
-    addDisplaySection($OBOptions);
+    outstandingBar_addMailchimpSection($OBOptions);
+    outstandingBar_addDisplaySection($OBOptions);
 }
 
-function addMailchimpSection($OBOptions) {
+function outstandingBar_addMailchimpSection($OBOptions) {
     $fields = array(
         array('name' => 'apiKey', 'text' => 'Mailchimp API Key')
         , array('name' => 'list', 'text' => 'Mailchimp List')
@@ -26,7 +24,7 @@ function addMailchimpSection($OBOptions) {
     $OBOptions->addSettingsSection('mailchimp', 'MailChimp Settings', $fields);
 }
 
-function addDisplaySection($OBOptions) {
+function outstandingBar_addDisplaySection($OBOptions) {
     $fields = array(
         array('name' => 'isActive', 'text' => 'Show Outstanding Bar')
         , array('name' => 'mainText', 'text' => 'Main Text')
@@ -47,12 +45,24 @@ function outstandingBar_apiKey_render() {
 
 function outstandingBar_list_render() {
     $OBOptions = new \Contrast\OutstandingBarOptions();
+    $options = outstandingBar_getMailChimpLists();
+    ?>
+    <select id="list" name="<?php echo $OBOptions->getFormElementName('list'); ?>">
+        <?php foreach ($options as $option) { ?>
+            <option value="<?php echo $option['value']; ?>" <?php selected($OBOptions->getOption('list'), $option['value']); ?>><?php echo $option['text']; ?></option>
+        <?php } ?>
+    </select>
+    <?php
+}
+
+function outstandingBar_getMailChimpLists(){
+    $OBOptions = new \Contrast\OutstandingBarOptions();
     $options = array(
         array('value' => '', 'text' => 'Please Select')
     );
     
     $apiKey = $OBOptions->getOption('apiKey');
-    if (isValidApiKey($apiKey)) {
+    if (outstandingBar_isValidApiKey($apiKey)) {
         $mc = new \Drewm\MailChimp($apiKey);
         $lists = $mc->call('lists/list');
         if ($lists['total'] > 0) {
@@ -63,21 +73,10 @@ function outstandingBar_list_render() {
     } else {
         $options = array(array('value' => '', 'text' => 'Invalid API Key'));
     }
-    ?>
-    <select id="list" name="<?php echo $OBOptions->getFormElementName('list'); ?>">
-        <?php
-        foreach ($options as $option) {
-            ?>
-            <option value="<?php echo $option['value']; ?>" <?php selected($OBOptions->getOption('list'), $option['value']); ?>><?php echo $option['text']; ?></option>
-            <?php
-        }
-        ?>
-    </select>
-
-    <?php
+    return $options;
 }
 
-function isValidApiKey($apiKey){
+function outstandingBar_isValidApiKey($apiKey){
      if($apiKey !== '' && preg_match('/^[0-9a-f]{32}-us([1-9]|10)$/', $apiKey) === 1){
         $mc = new \Drewm\MailChimp($apiKey);
         $ping = $mc->call('helper/ping');
@@ -133,11 +132,9 @@ function outstandingBar_displayStyle_render() {
     $OBOptions->outputFormElement('displayStyle', 'select', array('options' => $options));
 }
 
-function outstandingbar_options_page() {
+function outstandingBar_options_page() {
     ?>
-
     <form action='options.php' method='post'>
-
         <h2>Outstanding Bar Settings</h2>
 
         <?php
@@ -145,7 +142,6 @@ function outstandingbar_options_page() {
         do_settings_sections('outstandingBarPage');
         submit_button();
         ?>
-
     </form>
     <?php
 }

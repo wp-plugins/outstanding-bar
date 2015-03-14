@@ -8,7 +8,7 @@ require_once 'OutstandingBarOptions.php';
  * Plugin Name: OutstandingBar
  * Plugin URI: http://outstandingbar.com/
  * Description: Tired of countless pop-ups? Outstanding Bar is a simple Wordpress plugin that integrates with Mailchimp. Simply set up your settings once and collect emails in a way that your users won't find offensive.
- * Version: 0.1
+ * Version: 1.0
  * Author: CONTRAST
  * Author URI: http://wearecontrast.com/
  * License: Copyright 2015 Mike Gatward &amp; Fred Rivett (mike@wearecontrast.com, fred@wearecontrast.com)
@@ -68,9 +68,13 @@ class OutstandingBar {
     }
 
     private function _registerScript() {
-        wp_enqueue_script('outstandingbar-js'
+        if(!is_admin()){
+            wp_enqueue_script(
+                'outstandingbar-js'
                 , plugins_url('/js/outstandingbar.js', __FILE__)
-                , array('jquery'));
+                , array('jquery')
+            );
+        }
     }
 
     private function _getFullFilePath($path) {
@@ -81,14 +85,17 @@ class OutstandingBar {
         if ($this->_isActive()) {
             wp_enqueue_style('outstandingbar-css');
             wp_enqueue_style('outstandingbar-css-ie9');
-            $this->_outputAjaxUrl();
+            $this->_outputActiveJavascript();
             $this->_outputCustomColours();
+        } else {
+            $this->_outputNotActiveJavascript();
         }
     }
 
-    private function _outputAjaxUrl() {
+    private function _outputActiveJavascript() {
         ?>
         <script>
+            var outstandingBar_isActive = true;
             var outstandingBar_ajaxUrl = '<?php echo admin_url('admin-ajax.php'); ?>';
             var outstandingBar_nonce = '<?php echo wp_create_nonce('outstandingbar-security'); ?>';
             var outstandingBar_displayStyle = '<?php echo $this->_getDisplayStyle(); ?>';
@@ -131,6 +138,14 @@ class OutstandingBar {
     private function _getAccentColour(){
         $OBOptions = new \Contrast\OutstandingBarOptions();
         return $OBOptions->getOption('accentColour', '#fff000');
+    }
+    
+    private function _outputNotActiveJavascript() {
+        ?>
+        <script>
+            var outstandingBar_isActive = false;
+        </script>
+        <?php
     }
 
     public function _wpFooter() {

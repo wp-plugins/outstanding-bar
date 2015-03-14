@@ -16,18 +16,13 @@ jQuery(document).ready(function ($) {
 
     $('#wpbody-content form').on('submit', function(){
         if($('#apiKey').val().search(/^[0-9a-f]{32}-us([1-9]|10)$/) !== 0){
-            console.log('invalid api key');
+            alert('Invalid MailChimp API Key');
             return false;
         }
     });
-
-
+    
     function hideDisplaySettings() {
         $('#isActive').prop('checked', false).closest('table').hide().prev('h3').hide();
-    }
-
-    function showDisplaySettings() {
-        $('#isActive').closest('table').show().prev('h3').show();
     }
     
     $('#mainColour, #accentColour, #textColour').wpColorPicker();
