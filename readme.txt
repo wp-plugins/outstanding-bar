@@ -1,6 +1,6 @@
 === Outstanding Bar ===
 Contributors: wearecontrast, mikeaag, Fredheim_Holm
-Tags: email, newsletter
+Tags: email, newsletter, mailchimp, email signup, newsletter signup
 Requires at least: 4.1.1
 Tested up to: 4.1.1
 Stable tag: 1.0
