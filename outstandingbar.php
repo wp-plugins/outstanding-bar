@@ -8,7 +8,7 @@ require_once 'OutstandingBarOptions.php';
  * Plugin Name: OutstandingBar
  * Plugin URI: http://outstandingbar.com/
  * Description: Tired of countless pop-ups? Outstanding Bar is a simple Wordpress plugin that integrates with Mailchimp. Simply set up your settings once and collect emails in a way that your users won't find offensive.
- * Version: 1.0
+ * Version: 1.0.1
  * Author: CONTRAST
  * Author URI: http://wearecontrast.com/
  * License: Copyright 2015 Mike Gatward &amp; Fred Rivett (mike@wearecontrast.com, fred@wearecontrast.com)
@@ -119,7 +119,7 @@ class OutstandingBar {
             }
             .outstanding-bar .ob-submit-btn:hover, .outstanding-bar .ob-submit-btn:focus { 
                 background-color: <?php echo $this->_getAccentColour(); ?> !important;
-                color: <?php echo $this->_getTextColour(); ?> !important;
+                color: <?php echo $this->_getMainColour(); ?> !important;
             }
         </style>
         <?php
@@ -167,7 +167,20 @@ class OutstandingBar {
             <p class="ob-text"><?php echo $OBOptions->getOption('mainText'); ?></p>
             <input type="email" value="" name="email" id="ob-mc-email" class="ob-email" placeholder="Email address&hellip;">
             <button id="ob-mc-signup" class="ob-submit-btn"><?php echo $OBOptions->getOption('signupButton'); ?></button>
-            <a href="javascript:void(0)" class="ob-hide"><?php echo $OBOptions->getOption('hideButton'); ?></a>
+            <a href="javascript:void(0)" class="ob-hide-md"><?php echo $OBOptions->getOption('hideButton'); ?></a>
+            <a href="javascript:void(0)" class="ob-hide-sm">
+              <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+                   xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                   width="14px" height="14px" viewBox="0 0 14 14"
+                   enable-background="new 0 0 14 14" xml:space="preserve">
+                <g>
+                  <polyline fill="none" stroke="#FFFFFF" stroke-width="1.4897"
+                            points="10.57,10.86 7,7.292 10.57,3.722"/>
+                  <polyline fill="none" stroke="#FFFFFF" stroke-width="1.4897"
+                            points="3.431,10.86 7,7.292 3.431,3.722"/>
+                </g>
+              </svg>
+            </a>
         </section>
         <?php
     }
