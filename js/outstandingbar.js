@@ -15,7 +15,8 @@ jQuery(document).ready(function ($) {
                     outstandingBar_ajaxUrl,
                     data,
                     function (response) {
-                        console.log(response);
+                        $('#ob-mc-email').val('');
+                        $('.ob-text').text('Thanks for signing up');
                     }
             );
         });

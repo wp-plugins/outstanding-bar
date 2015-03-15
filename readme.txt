@@ -3,7 +3,7 @@ Contributors: wearecontrast, mikeaag, Fredheim_Holm
 Tags: email, newsletter, mailchimp, email signup, newsletter signup
 Requires at least: 4.1.1
 Tested up to: 4.1.1
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -72,6 +72,9 @@ If you wanna keep up with [#SixBySix](http://wearecontrast.com/2014/11/introduci
 1. Outstanding Bar in action
 
 == Changelog ==
+
+= 1.0.3 =
+* Add confirmation message after submitting email
 
 = 1.0.2 =
 * Fixing email input margin & tweaking overall bar padding
