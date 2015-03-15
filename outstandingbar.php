@@ -8,7 +8,7 @@ require_once 'OutstandingBarOptions.php';
  * Plugin Name: OutstandingBar
  * Plugin URI: http://outstandingbar.com/
  * Description: Tired of countless pop-ups? Outstanding Bar is a simple Wordpress plugin that integrates with Mailchimp. Simply set up your settings once and collect emails in a way that your users won't find offensive.
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: CONTRAST
  * Author URI: http://wearecontrast.com/
  * License: Copyright 2015 Mike Gatward &amp; Fred Rivett (mike@wearecontrast.com, fred@wearecontrast.com)
