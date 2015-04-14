@@ -20,6 +20,7 @@ function outstandingBar_addMailchimpSection($OBOptions) {
     $fields = array(
         array('name' => 'apiKey', 'text' => 'Mailchimp API Key')
         , array('name' => 'list', 'text' => 'Mailchimp List')
+        , array('name' => 'doubleOptIn', 'text' => 'Double Opt-in?')
     );
     $OBOptions->addSettingsSection('mailchimp', 'MailChimp Settings', $fields);
 }
@@ -30,6 +31,8 @@ function outstandingBar_addDisplaySection($OBOptions) {
         , array('name' => 'mainText', 'text' => 'Main Text')
         , array('name' => 'signupButton', 'text' => 'Signup Button')
         , array('name' => 'hideButton', 'text' => 'Hide Button')
+        , array('name' => 'successText', 'text' => 'Thank you Message')
+        , array('name' => 'emailPlaceholder', 'text' => 'Email Placeholder')
         , array('name' => 'mainColour', 'text' => 'Main Colour')
         , array('name' => 'accentColour', 'text' => 'Accent Colour')
         , array('name' => 'textColour', 'text' => 'Text Colour')
@@ -87,6 +90,15 @@ function outstandingBar_isValidApiKey($apiKey){
      return false;
 }
 
+function outstandingBar_doubleOptIn_render() {
+    $options = array(
+        array('value' => 1, 'text' => 'Yes')
+        ,array('value' => 0, 'text' => 'No')
+    );
+    $OBOptions = new \Contrast\OutstandingBarOptions();
+    $OBOptions->outputFormElement('doubleOptIn', 'select', array('options' => $options, 'default' => 1));
+}
+
 function outstandingBar_isActive_render() {
     $OBOptions = new \Contrast\OutstandingBarOptions();
     $OBOptions->outputFormElement('isActive', 'checkbox');
@@ -105,6 +117,16 @@ function outstandingBar_signupButton_render() {
 function outstandingBar_hideButton_render() {
     $OBOptions = new \Contrast\OutstandingBarOptions();
     $OBOptions->outputFormElement('hideButton', 'text', array('default' => 'hide'));
+}
+
+function outstandingBar_successText_render() {
+    $OBOptions = new \Contrast\OutstandingBarOptions();
+    $OBOptions->outputFormElement('successText', 'text', array('default' => 'Thanks for signing up'));
+}
+
+function outstandingBar_emailPlaceholder_render() {
+    $OBOptions = new \Contrast\OutstandingBarOptions();
+    $OBOptions->outputFormElement('emailPlaceholder', 'text', array('default' => 'Email Address...'));
 }
 
 function outstandingBar_mainColour_render() {

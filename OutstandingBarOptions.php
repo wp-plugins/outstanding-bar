@@ -102,7 +102,7 @@ class OutstandingBarOptions {
         <select id="<?php echo $name; ?>" name="<?php echo $this->getFormElementName($name); ?>">
             <?php foreach($options['options'] as $option){ ?>
                 <option value="<?php echo $option['value']; ?>" 
-                    <?php selected($option['value'], $this->getOption($name, $this->_getDefaultFromOptions($options, 'helvetica'))); ?>>
+                    <?php selected($option['value'], $this->getOption($name, $this->_getDefaultFromOptions($options, ''))); ?>>
                         <?php echo $option['text']; ?>
                 </option>
             <?php } ?>

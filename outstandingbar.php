@@ -8,7 +8,7 @@ require_once 'OutstandingBarOptions.php';
  * Plugin Name: OutstandingBar
  * Plugin URI: http://outstandingbar.com/
  * Description: Tired of countless pop-ups? Outstanding Bar is a simple Wordpress plugin that integrates with Mailchimp. Simply set up your settings once and collect emails in a way that your users won't find offensive.
- * Version: 1.0.3
+ * Version: 1.1.0
  * Author: CONTRAST
  * Author URI: http://wearecontrast.com/
  * License: Copyright 2015 Mike Gatward &amp; Fred Rivett (mike@wearecontrast.com, fred@wearecontrast.com)
@@ -19,12 +19,13 @@ class OutstandingBar {
      * Constants
      */
     const name = 'OutstandingBar';
+    const version = '1.1.0';
 
     /**
      * Constructor
      */
     public function __construct() {
-        register_activation_hook(__FILE__, array(&$this, 'activate'));
+        register_activation_hook(__FILE__, array($this, 'activate'));
         register_deactivation_hook(__FILE__, array($this, 'deactivate'));
 
         //Hook up to the init action
@@ -56,23 +57,38 @@ class OutstandingBar {
      * Runs when the plugin is initialized
      */
     public function init() {
+        $this->_initPluginVersion();
         $this->_registerStylesheet();
         $this->_registerScript();
         require_once $this->_getFullFilePath('options.php');
     }
 
+    private function _initPluginVersion() {
+        if (!defined('OUTSTANDINGBAR_VERSION_KEY')) {
+            define('OUTSTANDINGBAR_VERSION_KEY', 'outstandingbar_version');
+        }
+
+        if (!defined('OUTSTANDINGBAR_VERSION_NUM')) {
+            define('OUTSTANDINGBAR_VERSION_NUM', OutstandingBar::version);
+        }
+        
+        if (get_option(OUTSTANDINGBAR_VERSION_KEY) != OUTSTANDINGBAR_VERSION_NUM) {
+            update_option(OUTSTANDINGBAR_VERSION_KEY, OUTSTANDINGBAR_VERSION_NUM);
+        }
+    }
+
     private function _registerStylesheet() {
         wp_register_style('outstandingbar-css', plugins_url('css/outstandingbar.css', __FILE__));
         wp_register_style('outstandingbar-css-ie9', plugins_url('css/ie9.css', __FILE__));
-        $GLOBALS['wp_styles']->add_data( 'outstandingbar-css-ie9', 'conditional', 'lte IE 9' );
+        $GLOBALS['wp_styles']->add_data('outstandingbar-css-ie9', 'conditional', 'lte IE 9');
     }
 
     private function _registerScript() {
-        if(!is_admin()){
+        if (!is_admin()) {
             wp_enqueue_script(
-                'outstandingbar-js'
-                , plugins_url('/js/outstandingbar.js', __FILE__)
-                , array('jquery')
+                    'outstandingbar-js'
+                    , plugins_url('/js/outstandingbar.js', __FILE__)
+                    , array('jquery')
             );
         }
     }
@@ -102,17 +118,17 @@ class OutstandingBar {
         </script>
         <?php
     }
-    
-    private function _getDisplayStyle(){
+
+    private function _getDisplayStyle() {
         $OBOptions = new \Contrast\OutstandingBarOptions();
         return $OBOptions->getOption('displayStyle', 'Always');
     }
-    
-    private function _outputCustomColours(){
+
+    private function _outputCustomColours() {
         ?>
         <style>
             .outstanding-bar, .ob-collapsed .outstanding-bar { background-color: <?php echo $this->_getMainColour(); ?> !important; }
-            .outstanding-bar p, .outstanding-bar a.ob-hide { color: <?php echo $this->_getTextColour(); ?> !important; }
+            .outstanding-bar p, .outstanding-bar a.ob-hide, .outstanding-bar .ob-hide-md { color: <?php echo $this->_getTextColour(); ?> !important; }
             .outstanding-bar .ob-submit-btn { 
                 background-color: <?php echo $this->_getTextColour(); ?> !important;
                 color: <?php echo $this->_getMainColour(); ?> !important;
@@ -124,22 +140,22 @@ class OutstandingBar {
         </style>
         <?php
     }
-    
-    private function _getMainColour(){
+
+    private function _getMainColour() {
         $OBOptions = new \Contrast\OutstandingBarOptions();
         return $OBOptions->getOption('mainColour', '#333333');
     }
-    
-    private function _getTextColour(){
+
+    private function _getTextColour() {
         $OBOptions = new \Contrast\OutstandingBarOptions();
         return $OBOptions->getOption('textColour', '#ffffff');
     }
-    
-    private function _getAccentColour(){
+
+    private function _getAccentColour() {
         $OBOptions = new \Contrast\OutstandingBarOptions();
         return $OBOptions->getOption('accentColour', '#fff000');
     }
-    
+
     private function _outputNotActiveJavascript() {
         ?>
         <script>
@@ -164,23 +180,24 @@ class OutstandingBar {
         $OBOptions = new \Contrast\OutstandingBarOptions();
         ?>
         <section class="outstanding-bar ob-bottom ob-offscreen">
-            <p class="ob-text"><?php echo $OBOptions->getOption('mainText'); ?></p>
-            <input type="email" value="" name="email" id="ob-mc-email" class="ob-email" placeholder="Email address&hellip;">
-            <button id="ob-mc-signup" class="ob-submit-btn"><?php echo $OBOptions->getOption('signupButton'); ?></button>
-            <a href="javascript:void(0)" class="ob-hide-md"><?php echo $OBOptions->getOption('hideButton'); ?></a>
-            <a href="javascript:void(0)" class="ob-hide-sm">
-              <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
-                   xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                   width="14px" height="14px" viewBox="0 0 14 14"
-                   enable-background="new 0 0 14 14" xml:space="preserve">
-                <g>
-                  <polyline fill="none" stroke="#FFFFFF" stroke-width="1.4897"
-                            points="10.57,10.86 7,7.292 10.57,3.722"/>
-                  <polyline fill="none" stroke="#FFFFFF" stroke-width="1.4897"
-                            points="3.431,10.86 7,7.292 3.431,3.722"/>
-                </g>
-              </svg>
-            </a>
+            <p id="ob-mainText" class="ob-text"><?php echo $OBOptions->getOption('mainText', 'Enter your email to signup to our newsletter'); ?></p>
+            <p id="ob-successText" class="ob-text"><?php echo $OBOptions->getOption('successText', 'Thanks for signing up'); ?></p>
+            <input type="email" value="" name="email" id="ob-mc-email" class="ob-email" placeholder="<?php echo $OBOptions->getOption('emailPlaceholder', 'Email address...'); ?>">
+                <button id="ob-mc-signup" class="ob-submit-btn"><?php echo $OBOptions->getOption('signupButton', 'sign up'); ?></button>
+                <a href="javascript:void(0)" class="ob-hide-md"><?php echo $OBOptions->getOption('hideButton', 'hide'); ?></a>
+                <a href="javascript:void(0)" class="ob-hide-sm">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+                         xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                         width="14px" height="14px" viewBox="0 0 14 14"
+                         enable-background="new 0 0 14 14" xml:space="preserve">
+                        <g>
+                            <polyline fill="none" stroke="<?php echo $this->_getTextColour(); ?>" stroke-width="1.4897"
+                                      points="10.57,10.86 7,7.292 10.57,3.722"/>
+                            <polyline fill="none" stroke="<?php echo $this->_getTextColour(); ?>" stroke-width="1.4897"
+                                      points="3.431,10.86 7,7.292 3.431,3.722"/>
+                        </g>
+                    </svg>
+                </a>
         </section>
         <?php
     }
@@ -207,15 +224,16 @@ class OutstandingBar {
         $mc = new \Drewm\MailChimp($OBOptions->getOption('apiKey'));
         return $mc->call('lists/subscribe', array(
                     'id' => $OBOptions->getOption('list'),
-                    'email' => array('email' => $email)
+                    'email' => array('email' => $email),
+                    'double_optin' => ($OBOptions->getOption('doubleOptIn', '1') === '1') ? true : false
         ));
     }
-    
-    public function settingsJavascriptCss(){
+
+    public function settingsJavascriptCss() {
         wp_enqueue_script('outstandingbar-admin-js'
                 , plugins_url('/js/outstandingbar-admin.js', __FILE__)
                 , array('jquery', 'wp-color-picker'));
-        wp_enqueue_style( 'wp-color-picker' );
+        wp_enqueue_style('wp-color-picker');
     }
 
 }

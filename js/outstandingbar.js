@@ -16,7 +16,8 @@ jQuery(document).ready(function ($) {
                     data,
                     function (response) {
                         $('#ob-mc-email').val('');
-                        $('.ob-text').text('Thanks for signing up');
+                        $('#ob-mainText').hide();
+                        $('#ob-successText').css('display', 'inline-block');
                     }
             );
         });
