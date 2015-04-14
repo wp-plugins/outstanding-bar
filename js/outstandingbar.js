@@ -15,7 +15,9 @@ jQuery(document).ready(function ($) {
                     outstandingBar_ajaxUrl,
                     data,
                     function (response) {
-                        console.log(response);
+                        $('#ob-mc-email').val('');
+                        $('#ob-mainText').hide();
+                        $('#ob-successText').css('display', 'inline-block');
                     }
             );
         });
@@ -85,7 +87,7 @@ jQuery(document).ready(function ($) {
         }
 
         // on collapse signup bar click, add a class to the signup bar & set cookie
-        $("body").on("click", ".ob-hide", function (event) {
+        $("body").on("click", "[class^=ob-hide-]", function (event) {
             event.stopPropagation();
             $("body").addClass("ob-collapsed");
             // set cookie to expire auto expire in 30 days (and show outstanding bar again)
