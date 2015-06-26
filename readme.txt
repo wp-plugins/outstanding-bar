@@ -73,6 +73,10 @@ If you wanna keep up with [#SixBySix](http://wearecontrast.com/2014/11/introduci
 
 == Changelog ==
 
+= 1.1.1 =
+* Fix validation issue with MailChimp API Key (Thanks to Scott Werner for pointing this out)
+* Update Tested up to 4.2.2
+
 = 1.1.0 =
 * New: Add option to set custom thank you message
 * New: Add option to set if to use Double Opt-in
