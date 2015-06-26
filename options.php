@@ -80,7 +80,7 @@ function outstandingBar_getMailChimpLists(){
 }
 
 function outstandingBar_isValidApiKey($apiKey){
-     if($apiKey !== '' && preg_match('/^[0-9a-f]{32}-us([1-9]|10)$/', $apiKey) === 1){
+     if($apiKey !== '' && preg_match('/^[0-9a-f]{32}-us([0-9]{1,2})$/', $apiKey) === 1){
         $mc = new \Drewm\MailChimp($apiKey);
         $ping = $mc->call('helper/ping');
         if(array_key_exists('msg', $ping) && $ping['msg'] === "Everything's Chimpy!"){

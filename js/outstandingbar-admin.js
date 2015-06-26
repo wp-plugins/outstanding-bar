@@ -15,7 +15,7 @@ jQuery(document).ready(function ($) {
     }
 
     $('#wpbody-content form').on('submit', function(){
-        if($('#apiKey').val().search(/^[0-9a-f]{32}-us([1-9]|10)$/) !== 0){
+        if($('#apiKey').val().search(/^[0-9a-f]{32}-us([0-9]{1,2})$/) !== 0){
             alert('Invalid MailChimp API Key');
             return false;
         }
