@@ -3,7 +3,7 @@ Contributors: wearecontrast, mikeaag, Fredheim_Holm
 Tags: email, newsletter, mailchimp, email signup, newsletter signup
 Requires at least: 4.1.1
 Tested up to: 4.2.2
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -72,6 +72,9 @@ If you wanna keep up with [#SixBySix](http://wearecontrast.com/2014/11/introduci
 1. Outstanding Bar in action
 
 == Changelog ==
+
+= 1.1.2 =
+* Fix specificity issue with styling on some themes
 
 = 1.1.1 =
 * Fix validation issue with MailChimp API Key (Thanks to Scott Werner for pointing this out)
